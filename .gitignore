@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tgz
+*.zip
+evidence/
+.DS_Store
+._*
+.env
+.env.*
+*.log

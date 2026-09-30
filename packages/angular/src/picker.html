@@ -1,0 +1,31 @@
+<section class="gifsnap-picker" [attr.data-theme]="theme" [attr.aria-label]="mediaType === 'sticker' ? 'Sticker picker' : 'GIF picker'">
+  <form class="gifsnap-picker__form" (submit)="submit($event)">
+    <label class="gifsnap-picker__label">
+      <span>Search {{ mediaLabel }}</span>
+      <input class="gifsnap-picker__input" type="search" maxlength="120" autocomplete="off" placeholder="Try happy, cats, or hello" [value]="draft" (input)="updateDraft($event)" />
+    </label>
+    <button type="submit" class="gifsnap-picker__button">Search</button>
+  </form>
+  @if (query) { <button type="button" class="gifsnap-picker__reset" (click)="reset()">Back to trending</button> }
+  <p class="gifsnap-picker__status" role="status" aria-live="polite">
+    @if (state().loading) { {{ state().items.length ? 'Loading more ' + mediaLabel + '…' : 'Loading ' + mediaLabel + '…' }} }
+    @else if (!state().error) { {{ state().items.length ? state().items.length + ' ' + mediaLabel + ' ready to select' : 'No ' + mediaLabel + ' found. Try another search.' }} }
+  </p>
+  <ul class="gifsnap-picker__grid" [attr.aria-label]="mediaType === 'sticker' ? 'Sticker results' : 'GIF results'" [attr.aria-busy]="state().loading">
+    @for (gif of state().items; track gif.id) {
+      <li class="gifsnap-picker__item">
+        <button type="button" class="gifsnap-picker__card" (click)="select(gif)" [attr.aria-label]="'Select ' + (gif.title || 'Untitled GIF')">
+          <span class="gifsnap-picker__preview"><gifsnap-picker-image [gif]="gif" /></span>
+          <span class="gifsnap-picker__title">{{ gif.title || 'Untitled GIF' }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+  @if (state().error) {
+    <div class="gifsnap-picker__error" role="alert"><p>{{ state().error }}</p><button type="button" class="gifsnap-picker__button" (click)="retry()">Try again</button></div>
+  }
+  @if (!state().error && state().nextPage !== null) {
+    <button type="button" class="gifsnap-picker__button gifsnap-picker__more" [disabled]="state().loading" (click)="more()">{{ state().loading ? 'Loading…' : 'Load more' }}</button>
+  }
+  <div class="gifsnap-picker__attribution"><a href="https://gifsnap.com" target="_blank" rel="noopener noreferrer">Powered by GifSnap</a></div>
+</section>

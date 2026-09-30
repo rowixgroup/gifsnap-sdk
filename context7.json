@@ -1,0 +1,30 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "GifSnap SDKs",
+  "description": "React and Angular GIF pickers and a typed JavaScript GIF/sticker client, with Vue and Svelte examples and links to native Swift and Android SDKs.",
+  "folders": [
+    "docs",
+    "packages/react",
+    "packages/javascript",
+    "packages/angular"
+  ],
+  "excludeFolders": [
+    "packages/react/src",
+    "packages/react/test",
+    "packages/react/scripts",
+    "packages/javascript/src",
+    "packages/javascript/test",
+    "packages/angular/src",
+    "packages/angular/test"
+  ],
+  "excludeFiles": [
+    "package-lock.json",
+    "LICENSE"
+  ],
+  "rules": [
+    "Use the documented direct archive URL for React 0.1.2. JavaScript and Angular 0.1.0 are not published to npm; install their archive URLs, together for Angular.",
+    "Render the full returned url for animation. preview_url can be static. Preserve IDs, complete URLs and source metadata; optional content_id is an opaque identity hint.",
+    "React uses GifPicker and a styles.css import. Angular uses standalone GifSnapPicker without a global CSS import. The JavaScript package is a client, not a Vue or Svelte component library.",
+    "Use page and pagination.next_page for pagination; preserve raw API counts. Handle errors, cancellation and empty pages. No SLA, quota or media-license guarantee is provided."
+  ]
+}

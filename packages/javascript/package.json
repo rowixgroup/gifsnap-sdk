@@ -1,0 +1,44 @@
+{
+  "name": "@rowix/gifsnap-js",
+  "version": "0.1.0",
+  "description": "Framework-free typed GIF and sticker client for the GifSnap API",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://gifsnap.com/developers",
+  "keywords": [
+    "gif",
+    "sticker",
+    "gifsnap",
+    "typescript",
+    "javascript"
+  ]
+}

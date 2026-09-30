@@ -1,0 +1,53 @@
+{
+  "name": "@rowix/gifsnap-angular",
+  "version": "0.1.0",
+  "description": "Standalone Angular GIF and sticker picker for GifSnap",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/core": "^21.2.24 || ^22.0.0",
+    "@angular/common": "^21.2.24 || ^22.0.0"
+  },
+  "dependencies": {
+    "@rowix/gifsnap-js": "0.1.0",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@angular/core": "21.2.24",
+    "@angular/common": "21.2.24",
+    "@angular/compiler": "21.2.24",
+    "@angular/compiler-cli": "21.2.24",
+    "@angular/platform-browser": "21.2.24",
+    "@angular/platform-server": "21.2.24",
+    "@angular/build": "21.2.24",
+    "@angular/cli": "21.2.24",
+    "ng-packagr": "21.2.7",
+    "typescript": "~5.9.3",
+    "rxjs": "^7.8.2",
+    "jsdom": "^26.1.0",
+    "node": "24.21.0"
+  },
+  "scripts": {
+    "build": "ng-packagr -p ng-package.json -c tsconfig.json",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "pack:release": "npm run build && npm pack ./dist --pack-destination ."
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://gifsnap.com/developers",
+  "keywords": [
+    "angular",
+    "gif",
+    "sticker",
+    "gif-picker",
+    "gifsnap"
+  ],
+  "files": [
+    "fesm2022",
+    "types",
+    "README.md",
+    "LICENSE"
+  ]
+}
