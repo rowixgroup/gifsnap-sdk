@@ -8,20 +8,20 @@ Add GIF search and selection to an app with a React or Angular picker, or build 
 
 | Integration | Current version | Documentation and source |
 | --- | --- | --- |
-| React / Next.js | 0.1.2 direct archive | [React package](packages/react/README.md) |
-| JavaScript / TypeScript, Vue, Svelte | 0.1.0 direct archive | [JavaScript package](packages/javascript/README.md) |
-| Angular | 0.1.0 direct archive | [Angular package](packages/angular/README.md) |
+| React / Next.js | [0.1.2 on npm](https://www.npmjs.com/package/@rowix/gifsnap-react) | [React package](packages/react/README.md) |
+| JavaScript / TypeScript, Vue, Svelte | [0.1.0 on npm](https://www.npmjs.com/package/@rowix/gifsnap-js) | [JavaScript package](packages/javascript/README.md) |
+| Angular | [0.1.0 on npm](https://www.npmjs.com/package/@rowix/gifsnap-angular) | [Angular package](packages/angular/README.md) |
 | Swift / SwiftUI | 0.1.1 | [Swift repository and installation](https://github.com/rowixgroup/gifsnap-swift) |
 | Kotlin / Jetpack Compose | 0.1.1 | [Android repository and installation](https://github.com/rowixgroup/gifsnap-android) |
 
-**Distribution status:** React 0.1.1 is published to npm; React 0.1.2 is currently a direct download. JavaScript and Angular 0.1.0 are not published to npm. Use the exact archive commands below for these versions. Installing an archive still registers its normal package name for imports. Native releases and installation requirements are documented in their linked repositories. This source repository does not change previously released archives.
+React 0.1.2, JavaScript 0.1.0 and Angular 0.1.0 are published to npm under the `@rowix` scope. Install the package for your framework with the commands below. Angular installs its JavaScript dependency automatically. Native installation requirements are documented in their linked repositories.
 
 ## React and Next.js
 
 Requires React 18.2 or 19.
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-react-0.1.2.tgz
+npm install @rowix/gifsnap-react
 ```
 
 ```tsx
@@ -42,7 +42,7 @@ The callback receives the original selected object. The picker handles submitted
 Requires a browser with Fetch/AbortController or Node.js 18+.
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz
+npm install @rowix/gifsnap-js
 ```
 
 ```ts
@@ -59,10 +59,10 @@ Copy the [Vue 3 component example](packages/javascript/examples/GifSearch.vue) o
 
 ## Angular
 
-Requires Angular 21.2.24+ or 22, with a compatible Node/TypeScript environment. AngularJS is not supported. **Install both URLs in the same command**: the picker depends on `@rowix/gifsnap-js@0.1.0`, which is not on npm.
+Requires Angular 21.2.24+ or 22, with a compatible Node/TypeScript environment. AngularJS is not supported. npm installs the required `@rowix/gifsnap-js` dependency automatically.
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz https://gifsnap.com/downloads/rowix-gifsnap-angular-0.1.0.tgz
+npm install @rowix/gifsnap-angular
 ```
 
 ```ts
@@ -127,10 +127,10 @@ The default base URL is `https://gifsnap.com/api/v1`. Public requests currently 
 
 This is a source repository, not a single workspace package. React and JavaScript have safe npm lockfiles; from either package directory, run `npm ci` then `npm test`. Tests build the package and use mocked requests; they do not require an API key.
 
-Angular requires its JavaScript dependency during development. From `packages/angular`, run:
+From `packages/angular`, install the declared development dependencies and run the tests:
 
 ```sh
-npm install --no-save https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz
+npm install
 npm test
 ```
 
@@ -138,7 +138,9 @@ Use a Node version supported by Angular; this source was developed with Node 24.
 
 ## Documentation for coding assistants
 
-The [integration guide](docs/integration.md) and package READMEs provide concrete imports, release status and examples. `context7.json` describes documentation paths for an optional Context7 index. Its presence alone does not mean this repository has been submitted or successfully indexed. Developers must configure their own documentation or MCP tools; no automatic assistant recommendation or installation is implied.
+The [integration guide](docs/integration.md) and package READMEs provide concrete imports, release status and examples. [GifSnap SDKs on Context7](https://context7.com/rowixgroup/gifsnap-sdk) makes these docs available to connected coding assistants. `context7.json` identifies the documentation and usage rules to index. Developers must configure their own documentation or MCP tools; no automatic assistant recommendation or installation is implied.
+
+After publishing an SDK version, verify its npm registry metadata, update the version and install instructions in this README, the package README, the integration guide and `context7.json`, then refresh Context7 and check a fresh installation example. An accepted refresh alone does not verify the returned instructions.
 
 ## License
 

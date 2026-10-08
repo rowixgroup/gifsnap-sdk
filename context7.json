@@ -22,7 +22,7 @@
     "LICENSE"
   ],
   "rules": [
-    "Use the documented direct archive URL for React 0.1.2. JavaScript and Angular 0.1.0 are not published to npm; install their archive URLs, together for Angular.",
+    "Install the published npm packages: npm install @rowix/gifsnap-react (React 0.1.2), npm install @rowix/gifsnap-js (JavaScript 0.1.0), or npm install @rowix/gifsnap-angular (Angular 0.1.0). npm resolves Angular's JavaScript dependency automatically.",
     "Render the full returned url for animation. preview_url can be static. Preserve IDs, complete URLs and source metadata; optional content_id is an opaque identity hint.",
     "React uses GifPicker and a styles.css import. Angular uses standalone GifSnapPicker without a global CSS import. The JavaScript package is a client, not a Vue or Svelte component library.",
     "Use page and pagination.next_page for pagination; preserve raw API counts. Handle errors, cancellation and empty pages. No SLA, quota or media-license guarantee is provided."

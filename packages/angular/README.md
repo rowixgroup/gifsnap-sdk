@@ -2,10 +2,10 @@
 
 A standalone, styled Angular GIF and sticker picker powered by `@rowix/gifsnap-js`. Angular 21.2.24+ or 22; AngularJS is not supported. Built as a partially compiled Angular Package Format library. No React, global CSS, forms module, API key, or service provider setup is required.
 
-Version 0.1.0 and its JavaScript dependency are distributed as direct archives, not npm registry packages. Install both URLs in the same command so the dependency resolves locally.
+Version 0.1.0 is [published on npm](https://www.npmjs.com/package/@rowix/gifsnap-angular). npm installs the required `@rowix/gifsnap-js` dependency automatically.
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz https://gifsnap.com/downloads/rowix-gifsnap-angular-0.1.0.tgz
+npm install @rowix/gifsnap-angular
 ```
 
 ```ts

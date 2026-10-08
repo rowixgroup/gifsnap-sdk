@@ -2,10 +2,10 @@
 
 A small React GIF picker and typed client for the public GifSnap API. React 18.2 and 19 are supported. No runtime dependencies besides React; React is a peer dependency and is not bundled.
 
-Version 0.1.2 is distributed as the direct archive below. The npm registry currently provides 0.1.1; a bare npm install does not select 0.1.2.
+Version 0.1.2 is [published on npm](https://www.npmjs.com/package/@rowix/gifsnap-react).
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-react-0.1.2.tgz
+npm install @rowix/gifsnap-react
 ```
 
 ## React picker

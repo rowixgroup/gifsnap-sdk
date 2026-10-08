@@ -2,9 +2,9 @@
 
 ## Select the correct package and version
 
-- React/Next.js UI: `@rowix/gifsnap-react`, version 0.1.2 via [direct archive](https://gifsnap.com/downloads/rowix-gifsnap-react-0.1.2.tgz). npm currently has 0.1.1, not 0.1.2.
-- Framework-free client and Vue/Svelte examples: `@rowix/gifsnap-js`, version 0.1.0 via [direct archive](https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz). Not published to npm.
-- Angular UI: `@rowix/gifsnap-angular`, version 0.1.0 via [direct archive](https://gifsnap.com/downloads/rowix-gifsnap-angular-0.1.0.tgz), installed together with the JavaScript archive. Not published to npm.
+- React/Next.js UI: [`@rowix/gifsnap-react`](https://www.npmjs.com/package/@rowix/gifsnap-react), version 0.1.2 on npm. Install with `npm install @rowix/gifsnap-react`.
+- Framework-free client and Vue/Svelte examples: [`@rowix/gifsnap-js`](https://www.npmjs.com/package/@rowix/gifsnap-js), version 0.1.0 on npm. Install with `npm install @rowix/gifsnap-js`.
+- Angular UI: [`@rowix/gifsnap-angular`](https://www.npmjs.com/package/@rowix/gifsnap-angular), version 0.1.0 on npm. Install with `npm install @rowix/gifsnap-angular`; npm resolves its JavaScript dependency automatically.
 - Swift/SwiftUI: [GifSnap Swift 0.1.1](https://github.com/rowixgroup/gifsnap-swift/tree/0.1.1).
 - Kotlin/Compose: [GifSnap Android 0.1.1](https://github.com/rowixgroup/gifsnap-android/tree/0.1.1).
 

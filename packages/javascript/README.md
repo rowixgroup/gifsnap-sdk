@@ -2,10 +2,10 @@
 
 A small framework-free TypeScript client for the public GifSnap GIF and sticker API. No React dependency, API key, hidden telemetry, cookies, or automatic retries. ESM for modern browsers and Node 18+ with Fetch/AbortController support.
 
-Version 0.1.0 is distributed as a direct archive. This package is not currently published to npm.
+Version 0.1.0 is [published on npm](https://www.npmjs.com/package/@rowix/gifsnap-js).
 
 ```sh
-npm install https://gifsnap.com/downloads/rowix-gifsnap-js-0.1.0.tgz
+npm install @rowix/gifsnap-js
 ```
 
 ```ts
