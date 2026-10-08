@@ -26,5 +26,7 @@
     "Render the full returned url for animation. preview_url can be static. Preserve IDs, complete URLs and source metadata; optional content_id is an opaque identity hint.",
     "React uses GifPicker and a styles.css import. Angular uses standalone GifSnapPicker without a global CSS import. The JavaScript package is a client, not a Vue or Svelte component library.",
     "Use page and pagination.next_page for pagination; preserve raw API counts. Handle errors, cancellation and empty pages. No SLA, quota or media-license guarantee is provided."
-  ]
+  ],
+  "url": "https://context7.com/rowixgroup/gifsnap-sdk",
+  "public_key": "pk_Q7FGqR8qqE2u7VACxiQA9"
 }
