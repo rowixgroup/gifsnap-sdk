@@ -56,6 +56,8 @@ node examples/mcp/check.mjs --search
 
 The checker uses native Fetch and needs no dependency installation. It exercises this server's stateless JSON responses, not every possible MCP transport. Protocol verification does not establish that the visual component works in every client.
 
+Verified October 17, 2026: initialization, tool discovery and one headless `search_gifs` call returned a result from the public endpoint. This was owner verification traffic. The VS Code UI and visual rendering in other individual clients have not been tested in this check.
+
 ## Privacy and availability
 
 Only send short search keywords. Do not send conversation transcripts, personal information or secrets. Requests go to GifSnap's public service; catalog queries may be cached, and media can load from external hosts. See [the integration privacy notice](https://gifsnap.com/plugins/chatgpt/privacy).
@@ -64,4 +66,6 @@ Public access is currently best effort, without an SLA or guaranteed quota. Hand
 
 ## Registry metadata
 
-[server.json](server.json) describes this hosted endpoint for the official MCP Registry. Registration is pending verification. This repository contains client examples and SDKs; it is not the hosted MCP server's source repository. Registry discovery is separate from any client's app-store review or approval, and does not automatically enable the server for users.
+[server.json](server.json) describes this hosted endpoint for the official MCP Registry. Version `0.2.4` was published on October 17, 2026 and verified as active in the [official registry entry](https://registry.modelcontextprotocol.io/v0.1/servers/com.gifsnap%2Fgifsnap/versions/latest). The registry is currently in preview; downstream catalogs decide whether and when to include an entry.
+
+This repository contains client examples and SDKs; it is not the hosted MCP server's source repository. Registry discovery is separate from any client's app-store review or approval, and does not automatically enable the server for users.
