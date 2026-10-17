@@ -1,6 +1,7 @@
 // Run inside the pinned n8n Docker image with --network none. No live API calls.
 import assert from 'node:assert/strict';
-import { execFile } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import { createServer } from 'node:http';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { promisify } from 'node:util';
@@ -12,7 +13,10 @@ await mkdir(tmp, { recursive: true });
 const env = { ...process.env, N8N_USER_FOLDER: `${tmp}/user`, N8N_DIAGNOSTICS_ENABLED: 'false', N8N_VERSION_NOTIFICATIONS_ENABLED: 'false', N8N_TEMPLATES_ENABLED: 'false', N8N_PERSONALIZATION_ENABLED: 'false' };
 const cli = async args => {
   try { return (await exec('n8n', args, { env, maxBuffer: 8 * 1024 * 1024, timeout: 100000 })).stdout; }
-  catch (error) { throw new Error(`n8n ${args[0]} failed: ${(error.stdout || error.stderr || error.message).slice(-4000)}`); }
+  catch (error) {
+    if (args[0] === 'execute' && error.stdout?.includes('"resultData"')) return error.stdout;
+    throw new Error(`n8n ${args[0]} failed: ${(error.stderr || error.message).slice(-1500)}`);
+  }
 };
 
 const requests = [];
@@ -69,20 +73,22 @@ const cases = [
   { name: 'HTTP timeout fails without retry', query: 'slow', error: /timed? ?out|timeout|aborted/i },
 ];
 const results = [];
+let instance;
 try {
   const version = (await cli(['--version'])).trim();
   assert.equal(version, '2.43.7');
+  const workflows = [];
+  const executeIds = [];
+  const publishIds = [];
   for (let index = 0; index < cases.length; index++) {
     const c = cases[index];
     const child = structuredClone(template);
     child.id = `gifsnapChild${String(index).padStart(4, '0')}`;
     child.nodes.find(n => n.name === 'Search GifSnap').parameters.url = 'http://127.0.0.1:8787/api/v1/gifs/search';
-    const childFile = `${tmp}/child-${index}.json`;
-    await writeFile(childFile, JSON.stringify(child));
-    await cli(['import:workflow', `--input=${childFile}`]);
+    workflows.push(child);
     let executeId = child.id;
     if (!c.manual) {
-      await cli(['publish:workflow', `--id=${child.id}`]);
+      publishIds.push(child.id);
       const parent = {
         id: `gifsnapParent${String(index).padStart(3, '0')}`, name: 'Fixture caller', active: false,
         nodes: [
@@ -96,14 +102,51 @@ try {
           } },
         ], connections: { Start: { main: [[{ node: 'Call search', type: 'main', index: 0 }]] } }, settings: { executionOrder: 'v1' },
       };
-      const parentFile = `${tmp}/parent-${index}.json`;
-      await writeFile(parentFile, JSON.stringify(parent));
-      await cli(['import:workflow', `--input=${parentFile}`]);
+      workflows.push(parent);
       executeId = parent.id;
     }
+    executeIds.push(executeId);
+  }
+  const importFile = `${tmp}/workflows.json`;
+  await writeFile(importFile, JSON.stringify(workflows));
+  const imported = await cli(['import:workflow', `--input=${importFile}`]);
+  assert.ok(imported.includes(`Successfully imported ${workflows.length} workflows.`), 'All fixture workflows must import successfully');
+
+  // In 2.43.7 the legacy server CLI publish command does not populate the
+  // default publication service. Use the same local publish endpoint as the
+  // editor, with a disposable instance owner and no external network access.
+  instance = spawn('n8n', ['start'], { env: { ...env, N8N_SECURE_COOKIE: 'false', N8N_LISTEN_ADDRESS: '127.0.0.1' }, stdio: ['ignore', 'pipe', 'pipe'] });
+  let startupLog = '';
+  for (const stream of [instance.stdout, instance.stderr]) stream.on('data', chunk => { startupLog = (startupLog + chunk).slice(-2000); });
+  let ready = false;
+  for (let attempt = 0; attempt < 45; attempt++) {
+    try { ready = (await fetch('http://127.0.0.1:5678/healthz', { signal: AbortSignal.timeout(1000) })).ok; } catch {}
+    if (ready) break;
+    if (instance.exitCode !== null) throw new Error(`Fixture instance stopped: ${startupLog}`);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  assert.ok(ready, `Fixture n8n instance did not start: ${startupLog}`);
+  const setup = await fetch('http://127.0.0.1:5678/rest/owner/setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'fixture@example.invalid', firstName: 'Fixture', lastName: 'Owner', password: `Test1!${randomUUID()}` }) });
+  assert.ok(setup.ok, `Fixture owner setup failed (${setup.status})`);
+  const cookie = setup.headers.getSetCookie().map(value => value.split(';')[0]).join('; ');
+  assert.ok(cookie, 'Fixture session cookie must be present');
+  for (const id of publishIds) {
+    const saved = await fetch(`http://127.0.0.1:5678/rest/workflows/${id}`, { headers: { Cookie: cookie } });
+    assert.ok(saved.ok, `Could not read imported workflow (${saved.status})`);
+    const { data } = await saved.json();
+    const published = await fetch(`http://127.0.0.1:5678/rest/workflows/${id}/activate`, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/json' }, body: JSON.stringify({ versionId: data.versionId }) });
+    assert.ok(published.ok, `Could not publish fixture workflow (${published.status}): ${(await published.text()).slice(0, 300)}`);
+  }
+  const stopped = new Promise(resolve => instance.once('exit', resolve));
+  instance.kill('SIGTERM');
+  await stopped;
+  instance = undefined;
+
+  for (let index = 0; index < cases.length; index++) {
+    const c = cases[index];
     const before = requests.length;
     const started = Date.now();
-    const output = await cli(['execute', `--id=${executeId}`, '--rawOutput']);
+    const output = await cli(['execute', `--id=${executeIds[index]}`, '--rawOutput']);
     const execution = executionData(output);
     const result = execution.data.resultData;
     if (c.error) {
@@ -136,6 +179,7 @@ try {
   await writeFile('/out/runtime-results.json', JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
 } finally {
+  instance?.kill('SIGTERM');
   server.closeAllConnections();
   await new Promise(resolve => server.close(resolve));
 }

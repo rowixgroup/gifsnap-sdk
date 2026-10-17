@@ -1,12 +1,13 @@
 {
   "$schema": "https://context7.com/schema/context7.json",
   "projectTitle": "GifSnap SDKs",
-  "description": "React and Angular GIF pickers and a typed JavaScript GIF/sticker client, with Vue and Svelte examples and links to native Swift and Android SDKs.",
+  "description": "React and Angular GIF pickers, a typed JavaScript client, Vue and Svelte examples, an importable n8n search workflow, and links to native Swift and Android SDKs.",
   "folders": [
     "docs",
     "packages/react",
     "packages/javascript",
-    "packages/angular"
+    "packages/angular",
+    "examples/n8n"
   ],
   "excludeFolders": [
     "packages/react/src",
@@ -15,11 +16,13 @@
     "packages/javascript/src",
     "packages/javascript/test",
     "packages/angular/src",
-    "packages/angular/test"
+    "packages/angular/test",
+    "examples/n8n/test"
   ],
   "excludeFiles": [
     "package-lock.json",
-    "LICENSE"
+    "LICENSE",
+    "gifsnap-search.json"
   ],
   "rules": [
     "Install the published npm packages: npm install @rowix/gifsnap-react (React 0.1.2), npm install @rowix/gifsnap-js (JavaScript 0.1.0), or npm install @rowix/gifsnap-angular (Angular 0.1.0). npm resolves Angular's JavaScript dependency automatically.",
