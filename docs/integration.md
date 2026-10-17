@@ -101,6 +101,12 @@ The component uses encapsulated styles and returns the complete selected item. N
 
 The [Vue 3 example](../packages/javascript/examples/GifSearch.vue) emits `select`; the [Svelte 5 example](../packages/javascript/examples/GifSearch.svelte) accepts `onSelect`. They abort replaced requests and cleanup on unmount. They demonstrate first-page search, not complete pagination or media fallback. Keep those limitations when adapting them; the JavaScript package itself is a data client.
 
+## Composer integration example
+
+For a complete example of calling the JavaScript client from an existing host composer, see the [Sharkord evaluation adapter](https://github.com/rowixgroup/gifsnap-sharkord). Its source shows explicit search opt-in, cancellation, pagination, deduplication, selection and sending through the host's SDK. The tests cover draft preservation, send permissions and animated delivery between two accounts on a disposable local server.
+
+The adapter targets **Sharkord plugin SDK 2 at the revision pinned in its `upstream.json`**. Build it from its repository instructions; it is not an npm package or marketplace release. Local verification does not establish compatibility with other hosts or Sharkord versions. Maintainer acceptance and an independent installation have not been confirmed.
+
 ## Response and media rules
 
 A successful list response contains `data`, `pagination` and optional `query`. Each item includes `id`, `title`, `url`, `preview_url`, `width`, `height`, `type`, and optional `source` and `content_id`. Clients preserve additional metadata and raw response counts. Provider IDs are not interchangeable.

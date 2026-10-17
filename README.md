@@ -123,6 +123,12 @@ Render the full `url` to play returned GIF or animated WebP media; `preview_url`
 
 The default base URL is `https://gifsnap.com/api/v1`. Public requests currently need no API key. Handle failures, cancellation and future access-policy changes. SDKs add no analytics. API access, media rights and availability are separate from the SDK's MIT license; no quota, performance, commercial-media clearance or SLA is promised. Pickers retain a Powered by GifSnap link without displaying provider/source labels.
 
+## Sharkord composer example
+
+The [GifSnap for Sharkord source repository](https://github.com/rowixgroup/gifsnap-sharkord) shows the JavaScript client inside an existing chat composer. It includes explicit search and send actions, draft preservation, pagination, duplicate handling and permission checks.
+
+This is an **evaluation prototype** for Sharkord plugin SDK 2 at a pinned development revision. Its automated tests run a disposable local Sharkord server and verify animated delivery to a second account. No independent installation or maintainer acceptance has been confirmed. Follow that repository's setup instructions to build from source; there is no `@rowix/gifsnap-sharkord` npm package or marketplace release.
+
 ## Build and test the web packages
 
 This is a source repository, not a single workspace package. React and JavaScript have safe npm lockfiles; from either package directory, run `npm ci` then `npm test`. Tests build the package and use mocked requests; they do not require an API key.
