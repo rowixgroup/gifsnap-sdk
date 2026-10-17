@@ -1,0 +1,42 @@
+name: n8n example
+
+on:
+  push:
+    paths:
+      - 'examples/n8n/**'
+      - '.github/workflows/n8n-example.yml'
+  pull_request:
+    paths:
+      - 'examples/n8n/**'
+      - '.github/workflows/n8n-example.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  import-and-execute:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Contract tests
+        run: node --test examples/n8n/test/contract.test.mjs
+      - name: Prepare isolated runtime
+        run: |
+          docker pull n8nio/n8n:2.43.7
+          mkdir -p .n8n-test-output
+          chmod 777 .n8n-test-output
+      - name: Import and execute with fixture API
+        run: >-
+          docker run --rm --network none
+          --volume "$PWD/examples/n8n:/example:ro"
+          --volume "$PWD/.n8n-test-output:/out"
+          --entrypoint node n8nio/n8n:2.43.7 /example/test/runtime.mjs
+      - name: Save aggregate test result
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: n8n-runtime-results
+          path: .n8n-test-output/runtime-results.json
+          if-no-files-found: error
+          retention-days: 14

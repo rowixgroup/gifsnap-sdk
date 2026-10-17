@@ -13,6 +13,7 @@ Add GIF search and selection to an app with a React or Angular picker, or build 
 | Angular | [0.1.0 on npm](https://www.npmjs.com/package/@rowix/gifsnap-angular) | [Angular package](packages/angular/README.md) |
 | Swift / SwiftUI | 0.1.1 | [Swift repository and installation](https://github.com/rowixgroup/gifsnap-swift) |
 | Kotlin / Jetpack Compose | 0.1.1 | [Android repository and installation](https://github.com/rowixgroup/gifsnap-android) |
+| n8n automations and AI agent tools | Workflow example | [Import GIF search](examples/n8n/README.md) |
 
 React 0.1.2, JavaScript 0.1.0 and Angular 0.1.0 are published to npm under the `@rowix` scope. Install the package for your framework with the commands below. Angular installs its JavaScript dependency automatically. Native installation requirements are documented in their linked repositories.
 
@@ -128,6 +129,10 @@ The default base URL is `https://gifsnap.com/api/v1`. Public requests currently 
 The [GifSnap for Sharkord source repository](https://github.com/rowixgroup/gifsnap-sharkord) shows the JavaScript client inside an existing chat composer. It includes explicit search and send actions, draft preservation, pagination, duplicate handling and permission checks.
 
 This is an **evaluation prototype** for Sharkord plugin SDK 2 at a pinned development revision. Its automated tests run a disposable local Sharkord server and verify animated delivery to a second account. No independent installation or maintainer acceptance has been confirmed. Follow that repository's setup instructions to build from source; there is no `@rowix/gifsnap-sharkord` npm package or marketplace release.
+
+## n8n automation example
+
+For a workflow-based integration, [import the n8n GIF search example](examples/n8n/README.md). It provides a manual test and a reusable sub-workflow, with instructions for connecting it to an existing AI agent. It uses built-in nodes and returns GIF choices without posting messages. See the example for its tested runtime and limitations.
 
 ## Build and test the web packages
 

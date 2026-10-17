@@ -1,0 +1,250 @@
+{
+  "name": "GifSnap — search GIFs",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Try a search",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "example-query",
+              "name": "query",
+              "value": "happy",
+              "type": "string"
+            },
+            {
+              "id": "example-limit",
+              "name": "limit",
+              "value": 3,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "example-search",
+      "name": "Example search",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "query",
+              "type": "string"
+            },
+            {
+              "name": "limit",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "workflow-trigger",
+      "name": "Called by a workflow or agent",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        220,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nif (items.length !== 1) throw new Error('Send one GIF search per workflow execution.');\nconst input = items[0].json;\nif (typeof input.query !== 'string') throw new Error('query must be a short search phrase.');\nconst query = input.query.trim();\nif (!query || query.length > 120 || /[\\u0000-\\u001f\\u007f]/.test(query)) {\n  throw new Error('query must contain 1–120 characters with no control characters.');\n}\nconst limit = input.limit ?? 3;\nif (!Number.isInteger(limit) || limit < 1 || limit > 10) {\n  throw new Error('limit must be a whole number from 1 to 10 (default: 3).');\n}\n// Only these fields reach the HTTP node; do not forward conversation history.\nreturn [{ json: { query, limit } }];"
+      },
+      "id": "validate-search",
+      "name": "Validate search",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://gifsnap.com/api/v1/gifs/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "page",
+              "value": "1"
+            },
+            {
+              "name": "limit",
+              "value": "={{ $json.limit }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "responseFormat": "json",
+              "neverError": false
+            }
+          }
+        }
+      },
+      "id": "search-gifs",
+      "name": "Search GifSnap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        720,
+        100
+      ],
+      "retryOnFail": false,
+      "onError": "stopWorkflow"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json;\nconst input = $('Validate search').first().json;\nconst record = value => value !== null && typeof value === 'object' && !Array.isArray(value);\nconst integer = (value, minimum = 0) => Number.isSafeInteger(value) && value >= minimum;\nconst mediaUrl = value => typeof value === 'string' && /^https?:\\/\\/[^\\s/@]+(?:[/?#][^\\s]*)?$/.test(value);\nconst invalid = () => { throw new Error('GifSnap returned an invalid response. No GIF was selected.'); };\nif (!record(body) || !Array.isArray(body.data) || !record(body.pagination)) invalid();\nfor (const gif of body.data) {\n  if (!record(gif) || typeof gif.id !== 'string' || !gif.id ||\n      typeof gif.title !== 'string' || !mediaUrl(gif.url) || !mediaUrl(gif.preview_url) ||\n      !integer(gif.width) || !integer(gif.height) || !['gif', 'sticker'].includes(gif.type) ||\n      (gif.source !== undefined && typeof gif.source !== 'string') ||\n      (gif.content_id !== undefined && (typeof gif.content_id !== 'string' || !gif.content_id.trim()))) invalid();\n}\nconst p = body.pagination;\nif (!integer(p.page, 1) || !integer(p.limit, 1) || p.limit > 50 ||\n    !integer(p.total) || !integer(p.offset) || typeof p.has_next !== 'boolean' ||\n    (p.has_next ? !integer(p.next_page, p.page + 1) : p.next_page !== null)) invalid();\n// Keep full media URLs and per-item metadata. Empty results stay empty.\nreturn [{ json: { query: input.query, data: body.data.slice(0, input.limit), pagination: p } }];"
+      },
+      "id": "return-gifs",
+      "name": "Return GIFs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Try GifSnap\n1. Open **Example search** and set a short `query` plus `limit` (1–10).\n2. Select **Execute workflow**.\n3. Inspect **Return GIFs**. Use `data[].url` for animation; previews may be still images.\n\nNo API key currently needed. One read-only search; nothing is posted or downloaded.",
+        "height": 300,
+        "width": 440
+      },
+      "id": "quick-start",
+      "name": "Quick start",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reuse in an automation or AI agent\nSave this workflow. From **Execute Sub-workflow** or **Call n8n Workflow Tool**, select it and map only `query` and `limit`. Publish the sub-workflow before production calls.\n\nUse a short, non-sensitive search phrase, not chat history. This example returns choices, not a posted message. Errors stop the workflow; empty results stay empty.\n\nSetup and tested version: github.com/rowixgroup/gifsnap-sdk/tree/main/examples/n8n",
+        "height": 340,
+        "width": 580
+      },
+      "id": "reuse-guide",
+      "name": "Reuse this search",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -340
+      ]
+    }
+  ],
+  "connections": {
+    "Try a search": {
+      "main": [
+        [
+          {
+            "node": "Example search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Example search": {
+      "main": [
+        [
+          {
+            "node": "Validate search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Called by a workflow or agent": {
+      "main": [
+        [
+          {
+            "node": "Validate search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate search": {
+      "main": [
+        [
+          {
+            "node": "Search GifSnap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search GifSnap": {
+      "main": [
+        [
+          {
+            "node": "Return GIFs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "executionTimeout": 60,
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "pinData": {},
+  "tags": []
+}

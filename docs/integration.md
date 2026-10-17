@@ -127,6 +127,10 @@ For a complete example of calling the JavaScript client from an existing host co
 
 The adapter targets **Sharkord plugin SDK 2 at the revision pinned in its `upstream.json`**. Build it from its repository instructions; it is not an npm package or marketplace release. Local verification does not establish compatibility with other hosts or Sharkord versions. Maintainer acceptance and an independent installation have not been confirmed.
 
+## Automation workflows
+
+For n8n, use the [importable GIF search workflow](../examples/n8n/README.md). It calls the exact REST search route above using built-in nodes and accepts `query` and `limit`. The guide covers manual testing, reusable sub-workflow calls, and connecting **Call n8n Workflow Tool** to an existing AI Agent. No n8n-specific npm package is needed. The workflow returns first-page choices; message sending, moderation and model configuration belong to the host automation.
+
 ## Response and media rules
 
 A successful list response contains `data`, `pagination` and optional `query`. Each item includes `id`, `title`, `url`, `preview_url`, `width`, `height`, `type`, and optional `source` and `content_id`. Clients preserve additional metadata and raw response counts. Provider IDs are not interchangeable.
