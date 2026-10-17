@@ -1,3 +1,5 @@
+import { parseAnimatedPreview, type GifSnapAnimatedPreview } from './media.js';
+export { gifImageSources, parseAnimatedPreview, type GifSnapAnimatedPreview } from './media.js';
 /** Provider metadata is returned unchanged; media rights are separate from this SDK. */
 export interface GifSnapGif {
   id: string;
@@ -10,6 +12,7 @@ export interface GifSnapGif {
   source?: string;
   /** Optional opaque identity supplied by the API for verified aliases. */
   content_id?: string;
+  animated_preview?: GifSnapAnimatedPreview;
   [key: string]: unknown;
 }
 export interface GifSnapPagination {
@@ -69,7 +72,13 @@ function validateResponse(value: unknown): GifSnapResponse {
   if (!integer(p.page, 1) || !integer(p.limit, 1) || p.limit > 50 || !integer(p.total) || !integer(p.offset) ||
     typeof p.has_next !== 'boolean' || (p.has_next ? !integer(p.next_page, p.page + 1) : p.next_page !== null) ||
     (value.query !== undefined && typeof value.query !== 'string')) throw invalid();
-  return value as unknown as GifSnapResponse;
+  const data = value.data.map(item => {
+    if (!('animated_preview' in item)) return item;
+    const preview = parseAnimatedPreview(item.animated_preview);
+    const { animated_preview: _ignored, ...rest } = item;
+    return preview ? { ...rest, animated_preview: preview } : rest;
+  });
+  return { ...value, data } as unknown as GifSnapResponse;
 }
 function retryDelay(value: string | null): number | undefined {
   if (!value) return undefined;

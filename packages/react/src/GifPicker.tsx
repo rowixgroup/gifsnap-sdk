@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { createGifSnapClient, GifSnapError, type GifSnapClient, type GifSnapGif } from './client.js';
+import { createGifSnapClient, gifImageSources, GifSnapError, type GifSnapClient, type GifSnapGif } from './client.js';
 
 export interface GifPickerProps {
   onSelect: (gif: GifSnapGif) => void;
@@ -32,11 +32,11 @@ function unique(items: GifSnapGif[]): GifSnapGif[] {
 }
 function GifImage({ gif }: { gif: GifSnapGif }) {
   const [attempt, setAttempt] = useState(0);
-  const sources = [...new Set([gif.url, gif.preview_url].filter(Boolean))];
+  const sources = gifImageSources(gif);
   const src = sources[attempt];
   if (!src) return <span className="gifsnap-picker__unavailable">Preview unavailable</span>;
   return <img key={src} src={src} alt="" loading="lazy" decoding="async" width={gif.width || 240} height={gif.height || 180}
-    title={attempt > 0 ? 'Animation unavailable; showing preview' : undefined}
+    title={src === gif.preview_url && src !== gif.url ? 'Animation unavailable; showing preview' : undefined}
     onError={() => setAttempt(current => current === attempt ? current + 1 : current)} />;
 }
 function GifCard({ gif, onSelect }: { gif: GifSnapGif; onSelect: GifPickerProps['onSelect'] }) {
@@ -44,7 +44,7 @@ function GifCard({ gif, onSelect }: { gif: GifSnapGif; onSelect: GifPickerProps[
   return <li className="gifsnap-picker__item">
     <button type="button" className="gifsnap-picker__card" onClick={() => onSelect(gif)} aria-label={`Select ${title}`}>
       <span className="gifsnap-picker__preview">
-        <GifImage key={`${gif.url}\0${gif.preview_url}`} gif={gif} />
+        <GifImage key={`${gif.url}\0${gif.preview_url}\0${gif.animated_preview?.url ?? ''}`} gif={gif} />
       </span>
       <span className="gifsnap-picker__title">{title}</span>
     </button>

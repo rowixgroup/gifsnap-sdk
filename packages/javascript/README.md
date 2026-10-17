@@ -66,3 +66,7 @@ Vue and Svelte can call this client inside their component lifecycle and abort i
 ## License
 
 MIT covers this SDK's code only. It does not license the API service, GIF/sticker media, trademarks, or provider catalog. Media use and attribution remain subject to the relevant provider/API terms. See [GifSnap developer documentation](https://gifsnap.com/developers).
+
+## Lightweight previews
+
+`gifImageSources(gif)` returns a validated small animated image when available, the original `url`, then the legacy `preview_url`. Try these distinct URLs in order and stop after the final failure. `preview_url` can be static. Keep the complete original item and use `gif.url` when sending; `animated_preview` is optional and malformed metadata is safely ignored.

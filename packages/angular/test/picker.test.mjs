@@ -28,6 +28,19 @@ function search(fixture,query) {
 }
 const cards=f=>[...f.nativeElement.querySelectorAll('.gifsnap-picker__card')];
 
+test('small animation loads first, falls back to full then poster, and sends original',async()=>{
+ const item=gif('small',{animated_preview:{url:'https://media.example/small.webp',mime_type:'image/webp',width:160,height:120,byte_size:15000,animated:true}});
+ const f=await setup(client({trending:async()=>body([item])}));
+ assert.equal(f.nativeElement.querySelector('img').src,item.animated_preview.url);
+ let selected;f.componentInstance.gifSelect.subscribe(value=>selected=value);cards(f)[0].click();assert.equal(selected.url,item.url);
+ f.nativeElement.querySelector('img').dispatchEvent(new Event('error'));await settle(f);
+ assert.equal(f.nativeElement.querySelector('img').src,item.url);assert.equal(f.nativeElement.querySelector('img').title,'');
+ f.nativeElement.querySelector('img').dispatchEvent(new Event('error'));await settle(f);
+ assert.equal(f.nativeElement.querySelector('img').src,item.preview_url);
+ f.nativeElement.querySelector('img').dispatchEvent(new Event('error'));await settle(f);
+ assert.equal(f.nativeElement.querySelector('img'),null);
+});
+
 test('renders animated full URL, accessible controls and GifSnap link without provider labels while retaining selection metadata',async()=>{
  const item=gif('one',{content_id:'provider:1',provider_url:'https://provider.example/1'});
  const f=await setup(client({trending:async()=>body([item])}),{theme:'dark'});
