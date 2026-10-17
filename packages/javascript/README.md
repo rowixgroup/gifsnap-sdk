@@ -27,7 +27,31 @@ controller.abort();
 
 `client.search({ query, page?, limit?, signal? })` and `client.trending({ page?, limit?, signal? })` return GIFs. `searchStickers` and `trendingStickers` use the sticker endpoints with identical options. Defaults: page 1, limit 24; limit range 1–50. Empty search queries are rejected. Pagination is the server's raw pagination, not a count of unique media. Stop at an empty page, and guard repeated/duplicate-only pages in a UI.
 
+## HTTP routes and SDK options
+
+The SDK uses `query` in its JavaScript options and encodes it as the HTTP query parameter `q`. `signal` is a local Fetch option, never a query parameter. Every request uses GET. These are the exact routes with the default base URL:
+
+| JavaScript method | Complete HTTP endpoint | HTTP query parameters |
+| --- | --- | --- |
+| `client.search({ query, page?, limit?, signal? })` | `https://gifsnap.com/api/v1/gifs/search` | `q`, `page`, `limit` |
+| `client.trending({ page?, limit?, signal? })` | `https://gifsnap.com/api/v1/gifs/trending` | `page`, `limit` |
+| `client.searchStickers({ query, page?, limit?, signal? })` | `https://gifsnap.com/api/v1/stickers/search` | `q`, `page`, `limit` |
+| `client.trendingStickers({ page?, limit?, signal? })` | `https://gifsnap.com/api/v1/stickers/trending` | `page`, `limit` |
+
+For example, `client.search({ query: 'hello', page: 1, limit: 12 })` requests `https://gifsnap.com/api/v1/gifs/search?q=hello&page=1&limit=12`. The client encodes the search text. Routes retain their `gifs/` or `stickers/` segment after a custom base URL; do not infer a route from a method name.
+
+```sh
+curl 'https://gifsnap.com/api/v1/gifs/search?q=hello&page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/gifs/trending?page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/stickers/search?q=hello&page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/stickers/trending?page=1&limit=12'
+```
+
+## Client configuration
+
 `createGifSnapClient({ baseUrl?, fetch?, timeoutMs? })` supports a proxy or injected Fetch implementation. The default base is `https://gifsnap.com/api/v1`; timeout defaults to 15 seconds (range 1–120000 ms), covering both Fetch and body reading. Cancellation propagates the original AbortSignal reason. HTTP errors are `GifSnapError` with `code`, `status`, and optional `retryAfterSeconds`; other codes are `network`, `invalid_response`, and `timeout`. Requests use GET, Accept: application/json, and credentials: omit. There is no retry loop.
+
+The options object and all three properties are optional: `createGifSnapClient()` uses the public default base URL, native Fetch and a 15-second timeout. `baseUrl` is only needed to override that default.
 
 Exported types: `GifSnapGif`, `GifSnapPagination`, `GifSnapResponse`, `GifSnapClient`, `GifSnapClientOptions`, `GifSnapPageOptions`, `GifSnapSearchOptions`, `GifSnapErrorCode`.
 

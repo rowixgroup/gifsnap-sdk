@@ -10,6 +10,26 @@
 
 Use the [README installation commands](../README.md) before following these examples. Do not install the Git repository as though its root were a single npm package.
 
+## Exact REST endpoints
+
+The default API base URL is `https://gifsnap.com/api/v1`. All four list endpoints use GET:
+
+| Method in the JavaScript/Angular client | Endpoint relative to the base URL | HTTP query parameters |
+| --- | --- | --- |
+| `search` | `/gifs/search` | `q`, `page`, `limit` |
+| `trending` | `/gifs/trending` | `page`, `limit` |
+| `searchStickers` | `/stickers/search` | `q`, `page`, `limit` |
+| `trendingStickers` | `/stickers/trending` | `page`, `limit` |
+
+```sh
+curl 'https://gifsnap.com/api/v1/gifs/search?q=hello&page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/gifs/trending?page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/stickers/search?q=hello&page=1&limit=12'
+curl 'https://gifsnap.com/api/v1/stickers/trending?page=1&limit=12'
+```
+
+SDK options use `query`; the SDK encodes that value into HTTP `q`. `signal` is a local cancellation option, not an HTTP query parameter. Paths retain the `gifs/` or `stickers/` segment even with a custom base URL. The React client implements only the first two methods. All `createGifSnapClient` options, including `baseUrl`, are optional; calling it without arguments uses the defaults.
+
 ## JavaScript client: cancellation and errors
 
 ```ts

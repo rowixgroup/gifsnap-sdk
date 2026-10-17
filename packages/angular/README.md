@@ -57,6 +57,8 @@ Requests are aborted on a new search, client/media/page-size change, or componen
 
 ## Custom endpoint or fetch
 
+`createGifSnapClient()` works without arguments. The options object and `baseUrl`, `fetch` and `timeoutMs` are all optional. Set `baseUrl` only when overriding the default `https://gifsnap.com/api/v1`, as in this proxy example:
+
 ```ts
 import { createGifSnapClient } from '@rowix/gifsnap-angular';
 const pickerClient = createGifSnapClient({
@@ -67,6 +69,8 @@ const pickerClient = createGifSnapClient({
 ```
 
 Client methods are `search`, `trending`, `searchStickers`, and `trendingStickers`. Search takes `{ query, page?, limit?, signal? }`; trending takes `{ page?, limit?, signal? }`. The default API base is `https://gifsnap.com/api/v1`. HTTP and response validation, typed `GifSnapError`, cancellation, and a 15-second default timeout are supplied by the JavaScript package. No cookies, hidden telemetry, or automatic retries are added.
+
+The exact GET routes appended to the base URL are `/gifs/search`, `/gifs/trending`, `/stickers/search` and `/stickers/trending`, respectively. The SDK's `query` option becomes HTTP `q`; `page` and `limit` remain HTTP query parameters, while `signal` stays local. For complete URLs, see the [HTTP route reference](../../docs/integration.md#exact-rest-endpoints).
 
 ## Development and verification
 
