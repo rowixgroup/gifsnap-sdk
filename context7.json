@@ -26,8 +26,9 @@
     "Render the full returned url for animation. preview_url can be static. Preserve IDs, complete URLs and source metadata; optional content_id is an opaque identity hint.",
     "React uses GifPicker and a styles.css import. Angular uses standalone GifSnapPicker without a global CSS import. The JavaScript package is a client, not a Vue or Svelte component library.",
     "Use page and pagination.next_page for pagination; preserve raw API counts. Handle errors, cancellation and empty pages. No SLA, quota or media-license guarantee is provided.",
-    "HTTP contract: default base URL is https://gifsnap.com/api/v1. Exact GET routes are /gifs/search, /gifs/trending, /stickers/search and /stickers/trending. SDK search options use query; HTTP search uses q. Both use page and limit; signal is a local Fetch option. Never infer HTTP paths from SDK method names.",
-    "createGifSnapClient() requires no arguments. Its options object and baseUrl, fetch and timeoutMs properties are all optional; baseUrl defaults to https://gifsnap.com/api/v1. React's client has search and trending only; JavaScript and Angular clients also have searchStickers and trendingStickers."
+    "HTTP base: https://gifsnap.com/api/v1. Exact GET routes: /gifs/search, /gifs/trending, /stickers/search and /stickers/trending. Keep the gifs/ or stickers/ segment.",
+    "SDK search uses query; HTTP search uses q. Both use page and limit. signal is a local Fetch option, never an HTTP query parameter.",
+    "createGifSnapClient() needs no arguments. baseUrl, fetch and timeoutMs are optional. Default baseUrl: https://gifsnap.com/api/v1. React has search/trending only; JavaScript/Angular also have searchStickers/trendingStickers."
   ],
   "url": "https://context7.com/rowixgroup/gifsnap-sdk",
   "public_key": "pk_Q7FGqR8qqE2u7VACxiQA9"
