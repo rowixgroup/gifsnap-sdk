@@ -177,6 +177,22 @@
         480,
         -340
       ]
+    },
+    {
+      "parameters": {
+        "content": "# Search GIFs from GifSnap for automations and AI agents\n\n## Who it's for\n\nBuilders who want GIF choices for a message draft, content workflow or an existing AI agent.\n\n## What it does\n\nAccepts one short search phrase and a result limit, validates them and returns first-page GIF choices with full animated URLs. Empty results remain empty; invalid input, HTTP errors and malformed responses stop execution. It does not download media or post messages.\n\n## Setup\n\n1. Import the workflow.\n2. Open **Example search**, set **query** and a whole-number **limit** from 1–10.\n3. Select **Execute workflow** and inspect **Return GIFs**.\n4. To reuse it, save and publish it in your instance. Call it with **Execute Sub-workflow** or attach **Call n8n Workflow Tool** to your existing agent, mapping only **query** and **limit**.\n\n## Requirements and customization\n\nUses built-in nodes; tested on n8n 2.43.7. GifSnap currently needs no API key. An AI agent requires your own model configuration; agent execution was not part of runtime tests.\n\nUse short, non-sensitive queries. Check that **data** is nonempty before using **data[0].url**. Add your own preview or approval step before posting. API availability and media rights are separate from the workflow's MIT license.\n\n[Full setup guide](https://github.com/rowixgroup/gifsnap-sdk/tree/main/examples/n8n)",
+        "height": 1080,
+        "width": 620,
+        "color": 1
+      },
+      "id": "template-overview",
+      "name": "About this workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -340
+      ]
     }
   ],
   "connections": {
