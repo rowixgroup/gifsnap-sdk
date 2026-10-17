@@ -120,7 +120,11 @@ try {
   for (const stream of [instance.stdout, instance.stderr]) stream.on('data', chunk => { startupLog = (startupLog + chunk).slice(-2000); });
   let ready = false;
   for (let attempt = 0; attempt < 45; attempt++) {
-    try { ready = (await fetch('http://127.0.0.1:5678/healthz', { signal: AbortSignal.timeout(1000) })).ok; } catch {}
+    // /healthz is available before n8n has registered its editor API routes.
+    try {
+      const settings = await fetch('http://127.0.0.1:5678/rest/settings', { signal: AbortSignal.timeout(1000) });
+      ready = settings.ok && Boolean((await settings.json()).data);
+    } catch {}
     if (ready) break;
     if (instance.exitCode !== null) throw new Error(`Fixture instance stopped: ${startupLog}`);
     await new Promise(resolve => setTimeout(resolve, 1000));
