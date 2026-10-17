@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "gifsnap": {
+      "type": "http",
+      "url": "https://gifsnap.com/plugins/chatgpt/mcp"
+    }
+  }
+}

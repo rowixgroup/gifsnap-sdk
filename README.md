@@ -14,6 +14,7 @@ Add GIF search and selection to an app with a React or Angular picker, or build 
 | Swift / SwiftUI | 0.1.1 | [Swift repository and installation](https://github.com/rowixgroup/gifsnap-swift) |
 | Kotlin / Jetpack Compose | 0.1.1 | [Android repository and installation](https://github.com/rowixgroup/gifsnap-android) |
 | n8n automations and AI agent tools | Workflow example | [Import GIF search](examples/n8n/README.md) |
+| MCP clients and AI assistants | Hosted server 0.2.4 | [Connect to GIF search](examples/mcp/README.md) |
 
 React 0.1.2, JavaScript 0.1.0 and Angular 0.1.0 are published to npm under the `@rowix` scope. Install the package for your framework with the commands below. Angular installs its JavaScript dependency automatically. Native installation requirements are documented in their linked repositories.
 

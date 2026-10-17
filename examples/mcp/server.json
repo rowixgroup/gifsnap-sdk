@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.gifsnap/gifsnap",
+  "title": "GifSnap by Rowix",
+  "description": "Search GIFs and retrieve animated media URLs; show reactions in clients that support MCP Apps.",
+  "version": "0.2.4",
+  "websiteUrl": "https://github.com/rowixgroup/gifsnap-sdk/tree/main/examples/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gifsnap.com/plugins/chatgpt/mcp"
+    }
+  ]
+}
