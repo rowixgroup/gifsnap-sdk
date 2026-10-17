@@ -11,8 +11,8 @@ Add GIF search and selection to an app with a React or Angular picker, or build 
 | React / Next.js | [0.1.2 on npm](https://www.npmjs.com/package/@rowix/gifsnap-react) | [React package](packages/react/README.md) |
 | JavaScript / TypeScript, Vue, Svelte | [0.1.0 on npm](https://www.npmjs.com/package/@rowix/gifsnap-js) | [JavaScript package](packages/javascript/README.md) |
 | Angular | [0.1.0 on npm](https://www.npmjs.com/package/@rowix/gifsnap-angular) | [Angular package](packages/angular/README.md) |
-| Swift / SwiftUI | 0.1.1 | [Swift repository and installation](https://github.com/rowixgroup/gifsnap-swift) |
-| Kotlin / Jetpack Compose | 0.1.1 | [Android repository and installation](https://github.com/rowixgroup/gifsnap-android) |
+| Swift / SwiftUI | 0.1.2 | [Swift repository and installation](https://github.com/rowixgroup/gifsnap-swift) |
+| Kotlin / Jetpack Compose | 0.1.2 | [Android repository and installation](https://github.com/rowixgroup/gifsnap-android) |
 | n8n automations and AI agent tools | Workflow example | [Import GIF search](examples/n8n/README.md) |
 | MCP clients and AI assistants | Hosted server 0.2.4 | [Connect to GIF search](examples/mcp/README.md) |
 
@@ -91,7 +91,7 @@ Styles are encapsulated. No separate CSS import or forms-module setup is needed.
 Swift Package Manager, iOS 16+ for the picker:
 
 ```swift
-.package(url: "https://github.com/rowixgroup/gifsnap-swift.git", from: "0.1.1")
+.package(url: "https://github.com/rowixgroup/gifsnap-swift.git", from: "0.1.2")
 ```
 
 Add the `GifSnapUI` product to the app target, then:
@@ -114,7 +114,7 @@ The [Swift guide](https://github.com/rowixgroup/gifsnap-swift#readme) covers the
 For Android, configure the `https://gifsnap.com/sdk/android` Maven repository as described in the [Android installation guide](https://github.com/rowixgroup/gifsnap-android#install), then add:
 
 ```kotlin
-implementation("com.rowix.gifsnap:gifsnap-compose:0.1.1")
+implementation("com.rowix.gifsnap:gifsnap-compose:0.1.2")
 ```
 
 The Compose picker requires API 28+; the separate Kotlin client supports API 23+. Follow the native repository for compiler/Gradle requirements and the Maven-layout ZIP alternative. These artifacts are not advertised as Maven Central or JitPack releases.

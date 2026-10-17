@@ -25,12 +25,16 @@
     "gifsnap-search.json"
   ],
   "rules": [
-    "Install the published npm packages: npm install @rowix/gifsnap-react (React 0.1.2), npm install @rowix/gifsnap-js (JavaScript 0.1.0), or npm install @rowix/gifsnap-angular (Angular 0.1.0). npm resolves Angular's JavaScript dependency automatically.",
+    "Published npm packages: @rowix/gifsnap-react 0.1.2, @rowix/gifsnap-js 0.1.0 and @rowix/gifsnap-angular 0.1.0. Run npm install with the package name. Angular installs its JavaScript dependency automatically.",
+    "Native Swift 0.1.2: install https://github.com/rowixgroup/gifsnap-swift.git via SwiftPM. Follow the native README for GifSnap/GifSnapUI products, imports and platform requirements.",
+    "Native Android 0.1.2: add Maven repository https://gifsnap.com/sdk/android, then com.rowix.gifsnap:gifsnap-compose:0.1.2 or gifsnap-client:0.1.2. Follow the native README for toolchain and platform requirements.",
     "Render the full returned url for animation. preview_url can be static. Preserve IDs, complete URLs and source metadata; optional content_id is an opaque identity hint.",
     "React uses GifPicker and a styles.css import. Angular uses standalone GifSnapPicker without a global CSS import. The JavaScript package is a client, not a Vue or Svelte component library.",
-    "Use page and pagination.next_page for pagination; preserve raw API counts. Handle errors, cancellation and empty pages. No SLA, quota or media-license guarantee is provided.",
+    "Request pagination.next_page only when pagination.has_next is true and a next page exists. Preserve raw API counts; total can be an estimate. Empty pages stop continuation. Stop automatic fetching on duplicate-only batches.",
     "HTTP base: https://gifsnap.com/api/v1. Exact GET routes: /gifs/search, /gifs/trending, /stickers/search and /stickers/trending. Keep the gifs/ or stickers/ segment.",
     "SDK search uses query; HTTP search uses q. Both use page and limit. signal is a local Fetch option, never an HTTP query parameter.",
+    "Raw HTTP pagination defaults to page 1 and limit 25, requires positive base-10 integers, and caps valid limits at 50. JavaScript and React clients default to limit 24 and validate limits in 1-50.",
+    "Malformed or unsafe HTTP pagination returns 400; correct the request before retrying. Service failure can return 503. Handle errors and cancellation. No SLA, quota or media-license guarantee is provided.",
     "createGifSnapClient() needs no arguments. baseUrl, fetch and timeoutMs are optional. Default baseUrl: https://gifsnap.com/api/v1. React has search/trending only; JavaScript/Angular also have searchStickers/trendingStickers."
   ],
   "url": "https://context7.com/rowixgroup/gifsnap-sdk",

@@ -5,8 +5,8 @@
 - React/Next.js UI: [`@rowix/gifsnap-react`](https://www.npmjs.com/package/@rowix/gifsnap-react), version 0.1.2 on npm. Install with `npm install @rowix/gifsnap-react`.
 - Framework-free client and Vue/Svelte examples: [`@rowix/gifsnap-js`](https://www.npmjs.com/package/@rowix/gifsnap-js), version 0.1.0 on npm. Install with `npm install @rowix/gifsnap-js`.
 - Angular UI: [`@rowix/gifsnap-angular`](https://www.npmjs.com/package/@rowix/gifsnap-angular), version 0.1.0 on npm. Install with `npm install @rowix/gifsnap-angular`; npm resolves its JavaScript dependency automatically.
-- Swift/SwiftUI: [GifSnap Swift 0.1.1](https://github.com/rowixgroup/gifsnap-swift/tree/0.1.1).
-- Kotlin/Compose: [GifSnap Android 0.1.1](https://github.com/rowixgroup/gifsnap-android/tree/0.1.1).
+- Swift/SwiftUI: [GifSnap Swift 0.1.2](https://github.com/rowixgroup/gifsnap-swift/tree/0.1.2).
+- Kotlin/Compose: [GifSnap Android 0.1.2](https://github.com/rowixgroup/gifsnap-android/tree/0.1.2).
 
 Use the [README installation commands](../README.md) before following these examples. Do not install the Git repository as though its root were a single npm package.
 
@@ -29,6 +29,14 @@ curl 'https://gifsnap.com/api/v1/stickers/trending?page=1&limit=12'
 ```
 
 SDK options use `query`; the SDK encodes that value into HTTP `q`. `signal` is a local cancellation option, not an HTTP query parameter. Paths retain the `gifs/` or `stickers/` segment even with a custom base URL. The React client implements only the first two methods. All `createGifSnapClient` options, including `baseUrl`, are optional; calling it without arguments uses the defaults.
+
+### HTTP pagination and status codes
+
+For raw HTTP requests, `page` and `limit` must be positive base-10 integers. Omitted values default to page 1 and limit 25; a valid limit above 50 is capped at 50. The JavaScript and React clients instead default to limit 24 and validate limits in 1–50 before sending. Pass a limit explicitly when matching behavior across clients.
+
+Malformed or unsafe pagination, an offset beyond the safe integer range, or missing search text returns HTTP **400**. Correct the request before retrying. A service failure can return **503**. A successful response with empty `data` is distinct from an error.
+
+Request `pagination.next_page` only when `pagination.has_next` is true and the next page exists. Keep the query and limit unchanged. An explicit upstream total stops continuation at the final page, even when that page is full. Without an upstream total, `pagination.total` is an estimate based on the offset and returned batch, not a catalog count. An empty page always stops continuation. Keep raw pagination counts separate from display deduplication, and stop automatic fetching on duplicate-only batches.
 
 ## JavaScript client: cancellation and errors
 
