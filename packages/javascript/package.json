@@ -1,6 +1,6 @@
 {
   "name": "@rowix/gifsnap-js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Framework-free typed GIF and sticker client for the GifSnap API",
   "license": "MIT",
   "type": "module",
@@ -40,5 +40,13 @@
     "gifsnap",
     "typescript",
     "javascript"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rowixgroup/gifsnap-sdk.git",
+    "directory": "packages/javascript"
+  },
+  "bugs": {
+    "url": "https://github.com/rowixgroup/gifsnap-sdk/issues"
+  }
 }

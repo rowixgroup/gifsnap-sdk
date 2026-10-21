@@ -1,6 +1,6 @@
 {
   "name": "@rowix/gifsnap-react",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A small accessible React GIF picker and typed GifSnap API client",
   "license": "MIT",
   "type": "module",
@@ -57,5 +57,13 @@
     "react",
     "gifsnap",
     "typescript"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rowixgroup/gifsnap-sdk.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/rowixgroup/gifsnap-sdk/issues"
+  }
 }

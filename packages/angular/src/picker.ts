@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, PLATFORM_ID, inject, signal, type OnChanges, type OnDestroy, type OnInit, type SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { createGifSnapClient, GifSnapError, type GifSnapClient, type GifSnapGif } from '@rowix/gifsnap-js';
+import { createGifSnapClient, gifImageSources, GifSnapError, type GifSnapClient, type GifSnapGif } from '@rowix/gifsnap-js';
 
 export type GifSnapTheme = 'light' | 'dark' | 'system';
 export type GifSnapMediaType = 'gif' | 'sticker';
@@ -22,7 +22,7 @@ function unique(items: GifSnapGif[]): GifSnapGif[] {
   selector: 'gifsnap-picker-image', standalone: true, changeDetection: ChangeDetectionStrategy.OnPush,
   template: `@if (source(); as src) {
     <img [src]="src" alt="" loading="lazy" decoding="async" [width]="gif.width || 240" [height]="gif.height || 180"
-      [attr.title]="attempt() > 0 ? 'Animation unavailable; showing preview' : null" (error)="failed($event, src)" />
+      [attr.title]="src === gif.preview_url && src !== gif.url ? 'Animation unavailable; showing preview' : null" (error)="failed($event, src)" />
   } @else { <span>Preview unavailable</span> }`,
   styles: [':host{display:contents}img{display:block;width:100%;height:100%;object-fit:contain}span{padding:8px;text-align:center;color:var(--gs-muted);font-size:12px}'],
 })
@@ -30,7 +30,7 @@ export class GifSnapImage implements OnChanges {
   @Input({ required: true }) gif!: GifSnapGif;
   readonly attempt = signal(0);
   private sources: string[] = [];
-  ngOnChanges(): void { this.sources = [...new Set([this.gif.url, this.gif.preview_url].filter(Boolean))]; this.attempt.set(0); }
+  ngOnChanges(): void { this.sources = gifImageSources(this.gif); this.attempt.set(0); }
   source(): string | undefined { return this.sources[this.attempt()]; }
   failed(event: Event, expected: string): void {
     if (this.source() === expected && (event.target as HTMLImageElement).getAttribute('src') === expected) this.attempt.update(value => value + 1);

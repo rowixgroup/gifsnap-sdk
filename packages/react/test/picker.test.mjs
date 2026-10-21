@@ -33,6 +33,20 @@ async function search(container, value) {
 }
 afterEach(async () => { await act(async () => { for (const root of roots.splice(0)) root.unmount(); }); document.body.innerHTML = ''; });
 
+test('small animated preview falls back through full animation and poster, selection sends original', async () => {
+  let selected;
+  const item=gif('small', { animated_preview:{url:'https://media.example/small-animation.webp',mime_type:'image/webp',width:160,height:120,byte_size:15000,animated:true} });
+  const container=await render({onSelect:value=>{selected=value;},client:{search:async()=>response([]),trending:async()=>({...response([]),data:[item]})}});
+  assert.equal(container.querySelector('img').src,item.animated_preview.url);
+  await click(container.querySelector('.gifsnap-picker__card')); assert.equal(selected.url,item.url);
+  await act(async()=>container.querySelector('img').dispatchEvent(new dom.window.Event('error')));
+  assert.equal(container.querySelector('img').src,item.url); assert.equal(container.querySelector('img').title,'');
+  await act(async()=>container.querySelector('img').dispatchEvent(new dom.window.Event('error')));
+  assert.equal(container.querySelector('img').src,item.preview_url);
+  await act(async()=>container.querySelector('img').dispatchEvent(new dom.window.Event('error')));
+  assert.equal(container.querySelector('img'),null);
+});
+
 test('initial trending supports labeled keyboard-native selection and full metadata', async () => {
   let selected;
   const container = await render({ onSelect: item => { selected = item; }, theme: 'dark', client: { trending: async () => response(['a']), search: async () => response([]) } });
